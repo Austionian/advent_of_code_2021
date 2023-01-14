@@ -15,7 +15,7 @@ fn main() -> Result<()> {
     }
 
     let mut prev = 0;
-    let mut next = 0;
+    let mut next: i32;
     let mut part_two_res = 0;
     for i in input.windows(3) {
         next = i.iter().sum();
