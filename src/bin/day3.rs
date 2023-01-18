@@ -80,6 +80,7 @@ fn main() -> Result<()> {
         }
     }
 
+    print!("Part One: ");
     power.answer();
 
     let input: Vec<Vec<u32>> = include_str!("./day3_input.txt")
@@ -114,6 +115,7 @@ fn main() -> Result<()> {
         epsilon: co,
     };
 
+    print!("Part Two: ");
     life_support.answer();
 
     Ok(())
