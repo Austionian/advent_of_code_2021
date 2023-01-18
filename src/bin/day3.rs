@@ -15,6 +15,39 @@ impl Power {
     }
 }
 
+fn part_two(vs: Vec<Vec<u32>>, start: usize, oxy: bool) -> String {
+    if vs.len() == 1 {
+        let res: String = vs[0].iter().map(|v| v.to_string()).collect();
+        return res;
+    }
+
+    let new_start = start + 1;
+
+    let mut zero = Vec::new();
+    let mut one = Vec::new();
+
+    for i in vs {
+        if i[start] == 1 {
+            one.push(i);
+        } else {
+            zero.push(i);
+        }
+    }
+
+    if oxy {
+        if zero.len() > one.len() {
+            return part_two(zero, new_start, true);
+        }
+        return part_two(one, new_start, true);
+    }
+    if zero.len() > one.len() {
+        if one.len() >= 1 {
+            return part_two(one, new_start, false);
+        }
+    }
+    return part_two(zero, new_start, false);
+}
+
 fn main() -> Result<()> {
     let mut map = HashMap::new();
     let total_lines = include_str!("./day3_input.txt")
@@ -48,6 +81,40 @@ fn main() -> Result<()> {
     }
 
     power.answer();
+
+    let input: Vec<Vec<u32>> = include_str!("./day3_input.txt")
+        .lines()
+        .map(|line| line.chars().map(|c| c.to_digit(10).unwrap()).collect())
+        .collect();
+
+    let mut zero = Vec::new();
+    let mut one = Vec::new();
+
+    for i in input {
+        if i[0] == 1 {
+            one.push(i);
+        } else {
+            zero.push(i);
+        }
+    }
+
+    let oxy;
+    let co;
+
+    if zero.len() > one.len() {
+        oxy = part_two(zero, 0, true);
+        co = part_two(one, 0, false);
+    } else {
+        oxy = part_two(one, 0, true);
+        co = part_two(zero, 0, false);
+    }
+
+    let life_support = Power {
+        gamma: oxy,
+        epsilon: co,
+    };
+
+    life_support.answer();
 
     Ok(())
 }
