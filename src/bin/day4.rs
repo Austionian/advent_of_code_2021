@@ -4,6 +4,7 @@ use std::{collections::HashSet, num::ParseIntError, str::FromStr};
 #[derive(Debug)]
 struct Square {
     sets: Vec<HashSet<u32>>,
+    complete: bool,
 }
 
 impl FromStr for Square {
@@ -38,7 +39,10 @@ impl FromStr for Square {
             vec_set.push(column);
         }
 
-        Ok(Square { sets: vec_set })
+        Ok(Square {
+            sets: vec_set,
+            complete: false,
+        })
     }
 }
 
@@ -75,14 +79,24 @@ fn main() -> Result<()> {
         .map(|square| square.parse().unwrap())
         .collect::<Vec<_>>();
 
-    'outer: for num in numbers {
+    let mut winners = Vec::new();
+    let mut found_first = false;
+    for num in numbers {
         for square in squares.iter_mut() {
-            if square.turn(&num) {
-                println!("Part One: {}", square.total(&num));
-                break 'outer;
+            if square.turn(&num) && !square.complete {
+                if !found_first {
+                    println!("Part One: {}", square.total(&num));
+                    found_first = true;
+                    square.complete = true;
+                } else {
+                    winners.push(square.total(&num));
+                    square.complete = true;
+                }
             }
         }
     }
+
+    println!("Part Two: {:?}", winners.last().unwrap());
 
     Ok(())
 }
