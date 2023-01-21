@@ -1,6 +1,5 @@
 use anyhow::Result;
 use std::collections::HashMap;
-use std::{num::ParseIntError, str::FromStr};
 
 struct Power {
     gamma: String,
