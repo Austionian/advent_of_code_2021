@@ -1,5 +1,5 @@
 use anyhow::Result;
-use std::{fmt, num::ParseIntError, str::FromStr};
+use std::{fmt, str::FromStr};
 
 #[derive(Debug)]
 struct Position {
@@ -15,7 +15,7 @@ impl fmt::Display for Position {
 }
 
 impl FromStr for Position {
-    type Err = ParseIntError;
+    type Err = anyhow::Error;
 
     fn from_str(s: &str) -> Result<Self, Self::Err> {
         let (dir, amt) = s.split_once(' ').expect("Bad line given.");
