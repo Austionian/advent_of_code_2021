@@ -86,15 +86,7 @@ impl Line {
     }
 }
 
-fn greater_than_two(num: &i32) -> Option<i32> {
-    if num >= &2 {
-        return Some(*num);
-    }
-    None
-}
-
-fn main() -> Result<()> {
-    let lines = read_one_at_a_time::<Line>("./data/5.input")?;
+fn part_two(lines: Vec<Line>) -> Result<usize, anyhow::Error> {
     let mut map = collections::HashMap::new();
 
     lines.iter().for_each(|line| {
@@ -103,13 +95,28 @@ fn main() -> Result<()> {
         }
     });
 
-    let res: usize = map
+    Ok(map
         .iter()
-        .filter_map(|(_, v)| greater_than_two(&v))
-        .collect::<Vec<i32>>()
-        .len();
+        .fold(0, |acc, x| if x.1 > &1 { acc + 1 } else { acc }))
+}
+
+fn main() -> Result<()> {
+    let lines = read_one_at_a_time("./data/5.input")?;
+    let res = part_two(lines)?;
 
     println!("Part One: {res}");
 
     Ok(())
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn should_return_the_answer() {
+        let lines = read_one_at_a_time("./data/5.input").unwrap();
+        let res = part_two(lines);
+        assert_eq!(21305, res.unwrap());
+    }
 }
