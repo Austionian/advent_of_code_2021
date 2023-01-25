@@ -13,7 +13,8 @@ fn find_recursive_total(v: Vec<i32>, floor: i32, ceil: i32) -> i32 {
     let mut res_ceil = 0;
     for j in v {
         let dif = (j - floor).abs();
-        res_floor += recursion(dif);
+        // O(n) alternative to the recursion method I orginally found.
+        res_floor += (dif * (dif + 1)) / 2;
         let dif = (j - ceil).abs();
         res_ceil += recursion(dif);
     }
@@ -24,11 +25,7 @@ fn find_recursive_total(v: Vec<i32>, floor: i32, ceil: i32) -> i32 {
 }
 
 fn find_total(v: Vec<i32>, median: i32) -> i32 {
-    let mut res = 0;
-    for i in v {
-        res += (i - median).abs();
-    }
-    res
+    v.iter().fold(0, |acc, loc| (loc - median).abs() + acc)
 }
 
 fn cheapest_fuel(constant_burn: bool) -> Result<i32> {
