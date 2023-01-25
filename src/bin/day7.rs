@@ -1,21 +1,21 @@
 use anyhow::Result;
 use aoc::split_on_comma;
 
-fn recursion(v: i32) -> i32 {
+fn recursion(v: u32) -> u32 {
     if v == 0 {
         return 0;
     }
     return recursion(v - 1) + v;
 }
 
-fn find_recursive_total(v: Vec<i32>, floor: i32, ceil: i32) -> i32 {
-    let mut res_floor = 0;
-    let mut res_ceil = 0;
+fn find_recursive_total(v: Vec<i32>, floor: i32, ceil: i32) -> u32 {
+    let mut res_floor: u32 = 0;
+    let mut res_ceil: u32 = 0;
     for j in v {
-        let dif = (j - floor).abs();
+        let dif = j.abs_diff(floor);
         // O(n) alternative to the recursion method I orginally found.
         res_floor += (dif * (dif + 1)) / 2;
-        let dif = (j - ceil).abs();
+        let dif = j.abs_diff(ceil);
         res_ceil += recursion(dif);
     }
     if res_floor < res_ceil {
@@ -24,11 +24,11 @@ fn find_recursive_total(v: Vec<i32>, floor: i32, ceil: i32) -> i32 {
     res_ceil
 }
 
-fn find_total(v: Vec<i32>, median: i32) -> i32 {
-    v.iter().fold(0, |acc, loc| (loc - median).abs() + acc)
+fn find_total(v: Vec<i32>, median: i32) -> u32 {
+    v.iter().fold(0, |acc, loc| loc.abs_diff(median) + acc)
 }
 
-fn cheapest_fuel(constant_burn: bool) -> Result<i32> {
+fn cheapest_fuel(constant_burn: bool) -> Result<u32> {
     let mut input = split_on_comma::<i32>("./data/7.input")?;
     input.sort();
 
